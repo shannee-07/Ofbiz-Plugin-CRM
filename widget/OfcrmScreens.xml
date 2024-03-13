@@ -24,12 +24,49 @@ under the License.
     <screen name="main">
         <section>
             <actions>
-                <set field="headerItem" value="main"/><!-- this highlights the selected menu-item with name "main" -->
+                <set field="headerItem" value="main"/> <!-- this highlights the selected menu-item with name "main" -->
             </actions>
             <widgets>
-                <decorator-screen name="OfcrmCommonDecorator" location="${parameters.mainDecoratorLocation}">
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <label text="Hello World!! :)"/>
+                        <screenlet title="Add Coupon">
+                            <include-form name="AddCoupon" location="component://ofcrm/widget/OfcrmForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Find and list all coupons in a tabular format -->
+    <screen name="FindCoupon">
+        <section>
+            <actions>
+                <set field="headerItem" value="findCoupon"/>
+                <set field="titleProperty" value="PageTitleFindCoupon"/>
+                <set field="ofcrmCtx" from-field="parameters"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <section>
+                            <condition>
+                                <if-has-permission permission="Ofcrm" action="_VIEW"/>
+                            </condition>
+                            <widgets>
+                                <decorator-screen name="FindScreenDecorator" location="component://common/widget/CommonScreens.xml">
+                                    <decorator-section name="search-options">
+                                        <include-form name="FindCoupon" location="component://ofcrm/widget/OfcrmForms.xml"/>
+                                    </decorator-section>
+                                    <decorator-section name="search-results">
+                                        <include-form name="ListOfCoupon" location="component://ofcrm/widget/OfcrmForms.xml"/>
+                                    </decorator-section>
+                                </decorator-screen>
+                            </widgets>
+                            <fail-widgets>
+                                <label style="h3">${uiLabelMap.Ofcrm.ViewPermissionError}</label>
+                            </fail-widgets>
+                        </section>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

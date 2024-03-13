@@ -24,6 +24,15 @@ under the License.
     <vendor></vendor>
     <version>1.0</version>
 
+
+
+
+    <service name="createCoupon" default-entity-name="Coupon" engine="entity-auto" invoke="create" auth="true">
+        <description>Create a coupon</description>
+        <auto-attributes include="pk" mode="OUT" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="false"/>
+    </service>
+
     <service name="getSummary" engine="java"  auth="false" export="true" action="GET"
              location="com.example.crm.services.CRMServices" invoke="getSummary">
         <description>Finds productId(s) corresponding to a product reference, productId or a GoodIdentification idValue</description>
@@ -34,5 +43,7 @@ under the License.
         <!--        <attribute type="org.apache.ofbiz.entity.GenericValue" mode="OUT" name="product" optional="true"/>-->
         <attribute type="List" mode="OUT" name="response" optional="true"/>
     </service>
+
+
     
 </services>
