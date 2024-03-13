@@ -40,6 +40,13 @@ under the License.
     </postprocessor>
     -->
 
+
+<!--    <request-map uri="getSummary">-->
+<!--        <security https="true" auth="true"/>-->
+<!--        <event type="service" invoke="getSummary"/>-->
+<!--        <response name="success" type="view" value="view"/>-->
+<!--    </request-map>-->
+
     <request-map uri="createCoupon">
         <security https="true" auth="true"/>
         <event type="service" invoke="createCoupon"/>
