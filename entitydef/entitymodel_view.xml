@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:noNamespaceSchemaLocation="https://ofbiz.apache.org/dtds/entitymodel.xsd">
+    <title>Entity of an Apache OFBiz Component</title>
+    <description>None</description>
+    <version>1.0</version>
+
+
+    <view-entity entity-name="OrderSummaryByMonth"
+                 package-name="com.example.model"
+                 never-cache="true"
+                 title="Order Summary">
+        <member-entity entity-name=" OrderHeader" entity-alias="oh"/>
+        <field name="orderMonthYear" function="date_format" value="oh.entry_date" format="%Y-%m"/>
+        <field name="totalOrders" function="count" value="oh.entryDate"/>
+        <alias-all entity-alias="oh"/>
+        <alias entity-alias="OH" name="entryDate" group-by="true"/>
+
+        <view-link entity-alias="oh" rel-entity-name="OrderHeader" rel-entity-alias="oh2">
+            <key-map field-name="entryDate" rel-field-name="entryDate"/>
+        </view-link>
+        <condition field-name="entry_date" operator="not-null"/>
+<!--        <group-by field-name="orderMonthYear"/>-->
+    </view-entity>
+
+
+    <!--<view-entity entity-name="MonthViseOrders"-->
+    <!--             package-name="org.apache.ofbiz.order.order"-->
+    <!--             never-cache="true"-->
+    <!--             title="Order Header And Order Items View Entity">-->
+    <!--<member-entity entity-alias="OH" entity-name="OrderHeader"/>-->
+    <!--<member-entity entity-alias="OI" entity-name="OrderItem"/>-->
+    <!--<alias entity-alias="OH" name="orderId"/>-->
+    <!--<alias entity-alias="OH" name="salesChannelEnumId"/>-->
+    <!--<alias entity-alias="OH" name="orderDate"/>-->
+    <!--<alias entity-alias="OH" name="orderStatusId" field="statusId"/>-->
+    <!--<alias entity-alias="OH" name="grandTotal"/>-->
+    <!--<alias entity-alias="OH" name="productStoreId"/>-->
+    <!--<alias entity-alias="OH" name="orderTypeId"/>-->
+    <!--<alias entity-alias="OI" name="orderItemSeqId"/>-->
+    <!--<alias entity-alias="OI" name="productId"/>-->
+    <!--<alias entity-alias="OI" name="quantity"/>-->
+    <!--<alias entity-alias="OI" name="cancelQuantity"/>-->
+    <!--<alias entity-alias="OI" name="unitPrice"/>-->
+    <!--<alias entity-alias="OI" name="unitListPrice"/>-->
+    <!--<alias entity-alias="OI" name="itemDescription"/>-->
+    <!--<alias entity-alias="OI" name="itemStatusId" field="statusId"/>-->
+    <!--<alias entity-alias="OI" name="estimatedShipDate"/>-->
+    <!--<alias entity-alias="OI" name="estimatedDeliveryDate"/>-->
+    <!--<alias entity-alias="OI" name="shipBeforeDate"/>-->
+    <!--<alias entity-alias="OI" name="shipAfterDate"/>-->
+    <!--<alias entity-alias="OI" name="orderItemTypeId"/>-->
+    <!--<view-link entity-alias="OH" rel-entity-alias="OI">-->
+    <!--    <key-map field-name="orderId"/>-->
+    <!--</view-link>-->
+    <!--</view-entity>-->
+
+
+    <!--    <view-entity entity-name="OrderItemAndProduct"-->
+    <!--                 package-name="org.apache.ofbiz.order.order"-->
+    <!--                 never-cache="true"-->
+    <!--                 title="OrderItem And Product View Entity">-->
+    <!--        <member-entity entity-alias="OI" entity-name="OrderItem"/>-->
+    <!--        <member-entity entity-alias="PR" entity-name="Product"/>-->
+    <!--        <alias-all entity-alias="OI"/>-->
+    <!--        <alias-all entity-alias="PR">-->
+    <!--            <exclude field="comments"/>-->
+    <!--        </alias-all>-->
+    <!--        <view-link entity-alias="OI" rel-entity-alias="PR">-->
+    <!--            <key-map field-name="productId"/>-->
+    <!--        </view-link>-->
+    <!--        <relation type="one-nofk" rel-entity-name="Product">-->
+    <!--            <key-map field-name="productId"/>-->
+    <!--        </relation>-->
+    <!--    </view-entity>-->
+
+    <!--    <view-entity entity-name="WorkAndOrderItemFulfillment"-->
+    <!--                 package-name="org.apache.ofbiz.order.order"-->
+    <!--                 never-cache="true"-->
+    <!--                 title="WorkOrderItemFulfillment And WorkEffort View Entity">-->
+    <!--        <member-entity entity-alias="WOIF" entity-name="WorkOrderItemFulfillment"/>-->
+    <!--        <member-entity entity-alias="WE" entity-name="WorkEffort"/>-->
+    <!--        <alias-all entity-alias="WOIF"/>-->
+    <!--        <alias-all entity-alias="WE"/>-->
+    <!--        <view-link rel-entity-alias="WE" entity-alias="WOIF">-->
+    <!--            <key-map field-name="workEffortId"/>-->
+    <!--        </view-link>-->
+    <!--    </view-entity>-->
+    <!--    <view-entity entity-name="OrderAndPartyContactMech"-->
+    <!--                 package-name="org.apache.ofbiz.party.party"-->
+    <!--                 title="Order contact mech and purpose view">-->
+    <!--        <member-entity entity-alias="OCM" entity-name="OrderContactMech"/>-->
+    <!--        <member-entity entity-alias="CM" entity-name="ContactMech"/>-->
+    <!--        <member-entity entity-alias="PCM" entity-name="PartyContactMech"/>-->
+    <!--        <alias-all entity-alias="OCM"/>-->
+    <!--        <alias entity-alias="PCM" name="partyId"/>-->
+    <!--        <alias entity-alias="PCM" name="contactFromDate" field="fromDate"/>-->
+    <!--        <alias entity-alias="PCM" name="contactThruDate" field="thruDate"/>-->
+    <!--        <alias entity-alias="CM" name="contactMechTypeId"/>-->
+    <!--        <alias entity-alias="CM" name="infoString"/>-->
+    <!--        <alias entity-alias="PCM" name="comments"/>-->
+    <!--        <alias entity-alias="PCM" name="extension"/>-->
+    <!--        <alias entity-alias="PCM" name="allowSolicitation"/>-->
+    <!--        <view-link entity-alias="OCM" rel-entity-alias="CM">-->
+    <!--            <key-map field-name="contactMechId"/>-->
+    <!--        </view-link>-->
+    <!--        <view-link entity-alias="CM" rel-entity-alias="PCM">-->
+    <!--            <key-map field-name="contactMechId"/>-->
+    <!--        </view-link>-->
+    <!--    </view-entity>-->
+</entitymodel>

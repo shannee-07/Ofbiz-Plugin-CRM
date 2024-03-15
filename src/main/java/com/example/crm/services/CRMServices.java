@@ -1,10 +1,18 @@
 package com.example.crm.services;
 
+import org.apache.ofbiz.common.email.EmailServices;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.sql.Timestamp;
 
+import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilValidate;
@@ -20,27 +28,26 @@ import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.ServiceUtil;
 
 
-
 public class CRMServices {
 
     public static final String module = CRMServices.class.getName();
 
-    public static Map<String, Object> xyz(DispatchContext dctx, Map<String, ? extends Object> context) {
+    public static Map<String, Object> createCoupon(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = ServiceUtil.returnSuccess();
         Delegator delegator = dctx.getDelegator();
         try {
-            GenericValue ofbizDemo = delegator.makeValue("OfbizDemo");
-            // Auto generating next sequence of ofbizDemoId primary key
-            ofbizDemo.setNextSeqId();
+            GenericValue coupon = delegator.makeValue("Coupon");
+            // Auto generating next sequence of couponId primary key
+            coupon.setNextSeqId();
             // Setting up all non primary key field values from context map
-            ofbizDemo.setNonPKFields(context);
-            // Creating record in database for OfbizDemo entity for prepared value
-            ofbizDemo = delegator.create(ofbizDemo);
-            result.put("ofbizDemoId", ofbizDemo.getString("ofbizDemoId"));
-            Debug.log("==========This is my first Java Service implementation in Apache OFBiz. OfbizDemo record created successfully with ofbizDemoId:"+ofbizDemo.getString("ofbizDemoId"));
+            coupon.setNonPKFields(context);
+            // Creating record in database for Coupon entity for prepared value
+            coupon = delegator.create(coupon);
+            result.put("couponId", coupon.getString("couponId"));
+            Debug.log("==========This is my first Java Service implementation in Apache OFBiz. OfbizDemo record created successfully with couponId: " + coupon.getString("couponId"));
         } catch (GenericEntityException e) {
             Debug.logError(e, module);
-            return ServiceUtil.returnError("Error in creating record in OfbizDemo entity ........" +module);
+            return ServiceUtil.returnError("Error in creating record in OfbizDemo entity ........" + module);
         }
         return result;
     }
@@ -49,54 +56,81 @@ public class CRMServices {
         Delegator delegator = ctx.getDelegator();
 
         try {
-            List<GenericValue> list = EntityQuery.use(delegator)
-                    .select("orderId","entryDate","grandTotal", "orderTypeId")
-                    .from("OrderHeader")
-                    .orderBy("grandTotal DESC")
-                    .where(EntityCondition.makeCondition("grandTotal", EntityOperator.GREATER_THAN,  BigDecimal.valueOf(100)))
-                    .queryList();
-            Map<String,Object> res = ServiceUtil.returnSuccess();
-            res.put("response",list);
+//                    .queryList();
+
+            // Get month vise orders:
+
+            Map<String, Object> summaryByMonth = new HashMap<>();
+
+            List<GenericValue> orderHeaders = EntityQuery.use(delegator).from("OrderHeader").orderBy("entryDate ASC").queryList();
+
+            // Process the data
+            List<Map<String, Object>> monthViseOrders = new ArrayList<>();
+            for (GenericValue orderHeader : orderHeaders) {
+                Timestamp entryDateTimestamp = orderHeader.getTimestamp("entryDate");
+                if (entryDateTimestamp != null) {
+                    LocalDate entryDate = entryDateTimestamp.toLocalDateTime().toLocalDate();
+                    String formattedDate = entryDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+                    boolean found = false;
+                    // Check if the formattedDate already exists in monthViseOrders
+                    for (Map<String, Object> map : monthViseOrders) {
+                        if (map.containsKey(formattedDate)) {
+                            // If it exists, increment the count by 1
+                            map.put(formattedDate, (Integer) map.get(formattedDate) + 1);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        // If it doesn't exist, add a new map with the formattedDate and a count of 1
+                        Map<String, Object> monthOrders = new HashMap<>();
+                        monthOrders.put(formattedDate, 1);
+                        monthViseOrders.add(monthOrders);
+                    }
+                }
+            }
+
+
+            // Prepare the result
+//            summaryByMonth.put("monthViseOrders", monthViseOrders);
+
+            // completed
+
+            long completedItemsCount = EntityQuery.use(delegator).from("OrderItem").where("statusId", "ITEM_COMPLETED").queryCount();
+
+
+            long completedOrdersCount = EntityQuery.use(delegator).from("OrderHeader").where("statusId", "ORDER_COMPLETED").queryCount();
+
+
+            Map<String, Object> res = ServiceUtil.returnSuccess();
+            res.put("completedItemsCount", completedItemsCount);
+            res.put("completedOrdersCount", completedOrdersCount);
+            res.put("monthViseOrders", monthViseOrders);
+
             return res;
 
-        }catch (Exception e){
-            Map<String,Object> res = ServiceUtil.returnSuccess();
-            res.put("response",e);
+        } catch (Exception e) {
+            Map<String, Object> res = ServiceUtil.returnSuccess();
+            res.put("response", e);
             System.out.println("\nERROR IN QUERY\n=======================================\n");
             System.out.println(res);
             return res;
-//            return e;
         }
+    }
 
-
-//        String idToFind = (String) context.get("idToFind");
-////        String goodIdentificationTypeId = (String) context.get("goodIdentificationTypeId");
-//        String searchProductFirstContext = (String) context.get("searchProductFirst");
-//        String searchAllIdContext = (String) context.get("searchAllId");
+//    public static Map<String, Object> getSummary(DispatchContext ctx, Map<String, Object> context) {
+//        Delegator delegator = ctx.getDelegator();
 //
-//        boolean searchProductFirst = UtilValidate.isNotEmpty(searchProductFirstContext) && "N".equals(searchProductFirstContext) ? false : true;
-//        boolean searchAllId = UtilValidate.isNotEmpty(searchAllIdContext) && "Y".equals(searchAllIdContext) ? true : false;
-//
-//        GenericValue product = null;
-//        List<GenericValue> productsFound = null;
 //        try {
-//            productsFound = ProductWorker.findProductsById(delegator, idToFind, searchProductFirst, searchAllId);
-//        } catch (GenericEntityException e) {
-////            Debug.logError(e, MODULE);
-//            return ServiceUtil.returnError(e.getMessage());
-//        }
+//            // Construct the EntityQuery
 //
-//        if (UtilValidate.isNotEmpty(productsFound)) {
-//            // gets the first productId of the List
-//            product = EntityUtil.getFirst(productsFound);
-//            // remove this productId
-//            productsFound.remove(0);
+//        } catch (Exception e) {
+//            result.put("responseMessage", "Error: " + e.getMessage());
+//            e.printStackTrace();
 //        }
-//
-//        Map<String, Object> result = ServiceUtil.returnSuccess();
-//        result.put("product", product);
-//        result.put("productsList", productsFound);
 //
 //        return result;
-    }
+//    }
+
+
 }

@@ -32,7 +32,7 @@ under the License.
         <field name="couponId" type="id"><description>primary sequenced ID</description></field>
         <field name="description" type="description"></field>
         <field name="discountPercentage" type="numeric"></field>
-        <field name="exiryDate" type="date"></field>
+        <field name="expiryDate" type="date"></field>
         <prim-key field="couponId"/>
     </entity>
     <entity entity-name="Gift" package-name="org.apache.ofbiz.ofcrm" title="Gifts given to customers">

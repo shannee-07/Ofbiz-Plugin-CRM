@@ -59,6 +59,18 @@ under the License.
         <response name="success" type="view" value="FindCoupon"/>
     </request-map>
 
+    <request-map uri="createCouponByJavaService">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createCouponByJavaService"/>
+        <response name="success" type="view" value="main"/>
+    </request-map>
+
+    <request-map uri="createCouponByGroovyService">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createCouponByGroovyService"/>
+        <response name="success" type="view" value="main"/>
+    </request-map>
+
     <!-- Request Mappings -->
 <!--    <request-map uri="main">-->
 <!--        <security https="true" auth="true"/>-->
