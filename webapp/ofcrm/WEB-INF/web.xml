@@ -55,6 +55,10 @@ under the License.
             <param-value>/error:/control:/select:/index.html:/index.jsp:/default.html:/default.jsp:/images</param-value>
         </init-param>
         <init-param><param-name>redirectPath</param-name><param-value>/control/main</param-value></init-param>
+        <init-param>
+            <param-name>allowedPaths</param-name>
+            <param-value>/error:/control:/select:/index.html:/index.jsp:/default.html:/default.jsp:/images:/includes/:/css:/js</param-value>
+        </init-param>
     </filter>
     <filter>
         <display-name>ContextFilter</display-name>
