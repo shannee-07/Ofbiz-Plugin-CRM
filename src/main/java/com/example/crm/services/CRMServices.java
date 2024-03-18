@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.sql.Timestamp;
+import java.util.Locale;
+
 
 
 import org.apache.ofbiz.service.LocalDispatcher;
@@ -57,24 +59,23 @@ public class CRMServices {
         Delegator delegator = ctx.getDelegator();
 
         try {
-//                    .queryList();
 
-            // [1] Get month vise orders:
+            // [1] Get month wise orders:
 
             Map<String, Object> summaryByMonth = new HashMap<>();
 
             List<GenericValue> orderHeaders = EntityQuery.use(delegator).from("OrderHeader").orderBy("entryDate ASC").queryList();
 
             // Process the data
-            List<Map<String, Object>> monthViseOrders = new ArrayList<>();
+            List<Map<String, Object>> monthWiseOrders = new ArrayList<>();
             for (GenericValue orderHeader : orderHeaders) {
                 Timestamp entryDateTimestamp = orderHeader.getTimestamp("entryDate");
                 if (entryDateTimestamp != null) {
                     LocalDate entryDate = entryDateTimestamp.toLocalDateTime().toLocalDate();
                     String formattedDate = entryDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
                     boolean found = false;
-                    // Check if the formattedDate already exists in monthViseOrders
-                    for (Map<String, Object> map : monthViseOrders) {
+                    // Check if the formattedDate already exists in monthWiseOrders
+                    for (Map<String, Object> map : monthWiseOrders) {
                         if (map.containsKey(formattedDate)) {
                             // If it exists, increment the count by 1
                             map.put(formattedDate, (Integer) map.get(formattedDate) + 1);
@@ -86,21 +87,21 @@ public class CRMServices {
                         // If it doesn't exist, add a new map with the formattedDate and a count of 1
                         Map<String, Object> monthOrders = new HashMap<>();
                         monthOrders.put(formattedDate, 1);
-                        monthViseOrders.add(monthOrders);
+                        monthWiseOrders.add(monthOrders);
                     }
                 }
             }
 
 
             // Prepare the result
-//            summaryByMonth.put("monthViseOrders", monthViseOrders);
+//            summaryByMonth.put("monthWiseOrders", monthWiseOrders);
 
             // completed
 
             // [2] Completed Items Count
             long completedItemsCount = EntityQuery.use(delegator).from("OrderItem").where("statusId", "ITEM_COMPLETED").queryCount();
 
-            List<GenericValue>  completedOrders = EntityQuery.use(delegator).from("OrderHeader").where("statusId", "ORDER_COMPLETED").queryList();
+            List<GenericValue> completedOrders = EntityQuery.use(delegator).from("OrderHeader").where("statusId", "ORDER_COMPLETED").queryList();
 
             // [3] Completed Orders Count
             long completedOrdersCount = completedOrders.size();
@@ -118,25 +119,21 @@ public class CRMServices {
             long totalCustomers = EntityQuery.use(delegator).from("PartyPersonAndRole").where("roleTypeId", "CUSTOMER").queryCount();
 
             // [6] Top Customers based on spent amount:
-            List<GenericValue> topCustomers = EntityQuery.use(delegator).select("partyId","firstName","lastName","totalSpending","totalOrders").from("TopCustomers").orderBy("totalSpending DESC").queryList();
+            List<GenericValue> topCustomers = EntityQuery.use(delegator).select("partyId", "firstName", "lastName", "totalSpending", "totalOrders").from("TopCustomers").orderBy("totalSpending DESC").queryList();
 
             // [7] Latest Orders
             List<GenericValue> latestOrders = EntityQuery.use(delegator).from("LatestOrders").orderBy("entryDate DESC").queryList();
 
-
-//            long totalRevenue = EntityQuery.use(delegator).from("")
+            // long totalRevenue = EntityQuery.use(delegator).from("")
 
             Map<String, Object> res = ServiceUtil.returnSuccess();
             res.put("completedItemsCount", completedItemsCount);
             res.put("completedOrdersCount", completedOrdersCount);
-            res.put("monthViseOrders", monthViseOrders);
+            res.put("monthWiseOrders", monthWiseOrders);
             res.put("totalRevenue", totalRevenue);
             res.put("totalCustomers", totalCustomers);
             res.put("topCustomers", topCustomers);
             res.put("latestOrders", latestOrders);
-
-
-
 
 
             return res;
@@ -150,19 +147,44 @@ public class CRMServices {
         }
     }
 
-//    public static Map<String, Object> getSummary(DispatchContext ctx, Map<String, Object> context) {
-//        Delegator delegator = ctx.getDelegator();
-//
-//        try {
-//            // Construct the EntityQuery
-//
-//        } catch (Exception e) {
-//            result.put("responseMessage", "Error: " + e.getMessage());
-//            e.printStackTrace();
-//        }
-//
-//        return result;
-//    }
+    public static Map<String, Object> ordersAnalysis(DispatchContext ctx, Map<String, Object> context) {
+        Delegator delegator = ctx.getDelegator();
+        Map<String, Object> res = ServiceUtil.returnSuccess();
+
+        try {
+            List<GenericValue> cityWiseOrders = EntityQuery.use(delegator).from("CityWiseOrders").orderBy("totalOrders DESC").queryList();
+            res.put("cityWiseOrders", cityWiseOrders);
+        } catch (Exception e) {
+            res.put("responseMessage", "Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+
+        return res;
+    }
 
 
 }
+
+//        try {
+//            context.put("communicationEventId", "1");
+//            context.put("locale", Locale.US);
+//            context.put("subject", "Test Email");
+//            context.put("body", "This is a test email.");
+//            context.put("sendTo", "shanneeahirwar@gmail.com");
+//            context.put("sendFrom", "shanneeahirwar20174@acropolis.in");
+//            context.put("sendType", "mail.smtp.host");
+//            context.put("sendVia", "smtp.example.com");
+//
+//            // Call the sendMail method
+//            Map<String, Object> result = EmailServices.sendMail(ctx, context);
+//
+//            // Check the result
+//            if (ServiceUtil.isSuccess(result)) {
+//                System.out.println("Email sent successfully.");
+//            } else {
+//                System.out.println("Failed to send email: " + ServiceUtil.getErrorMessage(result));
+//            }
+//        } catch (Exception e) {
+//
+//        }

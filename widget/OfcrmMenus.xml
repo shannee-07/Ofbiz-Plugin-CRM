@@ -22,6 +22,6 @@ under the License.
     <menu name="MainAppBar" title="${uiLabelMap.OfcrmApplication}" extends="CommonAppBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
         <menu-item name="main" title="${uiLabelMap.CommonMain}"><link target="main"/></menu-item>
         <menu-item name="findCoupon" title="${uiLabelMap.CouponFind}"><link target="FindCoupon"/></menu-item>
-
+        <menu-item name="addCouponFTL" title="FTL"><link target="AddCouponFtl"/></menu-item>
     </menu>
 </menus>

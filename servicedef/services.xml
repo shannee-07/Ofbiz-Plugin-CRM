@@ -39,12 +39,25 @@ under the License.
         </description>
         <attribute type="Object" mode="OUT" name="completedOrdersCount" optional="true"/>
         <attribute type="Object" mode="OUT" name="completedItemsCount" optional="true"/>
-        <attribute type="List" mode="OUT" name="monthViseOrders" optional="true"/>
+        <attribute type="List" mode="OUT" name="monthWiseOrders" optional="true"/>
         <attribute type="Object" mode="OUT" name="totalRevenue" optional="true"/>
         <attribute type="Object" mode="OUT" name="totalCustomers" optional="true"/>
         <attribute type="Object" mode="OUT" name="topCustomers" optional="true"/>
         <attribute type="List" mode="OUT" name="latestOrders" optional="true"/>
 
+    </service>
+
+    <service name="ordersAnalysis" engine="java" auth="false" export="true" action="GET"
+             location="com.example.crm.services.CRMServices" invoke="ordersAnalysis">
+        <description> Analysis of orders to be shown in graph
+        </description>
+        <attribute type="List" mode="OUT" name="cityWiseOrders" optional="true"/>
+<!--        <attribute type="Object" mode="OUT" name="completedItemsCount" optional="true"/>-->
+<!--        <attribute type="List" mode="OUT" name="monthWiseOrders" optional="true"/>-->
+<!--        <attribute type="Object" mode="OUT" name="totalRevenue" optional="true"/>-->
+<!--        <attribute type="Object" mode="OUT" name="totalCustomers" optional="true"/>-->
+<!--        <attribute type="Object" mode="OUT" name="topCustomers" optional="true"/>-->
+<!--        <attribute type="List" mode="OUT" name="latestOrders" optional="true"/>-->
     </service>
 
     <service name="createCouponByJavaService" default-entity-name="Coupon" engine="java" action="POST" export="true"
