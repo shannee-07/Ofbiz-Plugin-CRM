@@ -11,6 +11,10 @@
     <#list layoutSettings.javaScripts as javaScript>
       <script type="text/javascript" src="${StringUtil.wrapString(javaScript)}"></script>
     </#list>
+    <style>
+
+
+    </style>
   </head>
   <body data-offset="125">
     <h4 align="center"> ==================Page PreBody Starts From Decorator Screen========================= </h4>

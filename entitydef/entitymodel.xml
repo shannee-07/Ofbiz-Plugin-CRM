@@ -35,6 +35,7 @@ under the License.
         <field name="expiryDate" type="date"></field>
         <prim-key field="couponId"/>
     </entity>
+
     <entity entity-name="Gift" package-name="org.apache.ofbiz.ofcrm" title="Gifts given to customers">
         <field name="giftId" type="id"></field>
         <field name="description" type="description"></field>

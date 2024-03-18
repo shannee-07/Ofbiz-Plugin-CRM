@@ -25,21 +25,78 @@ under the License.
     <version>1.0</version>
 
 
-    <view-entity entity-name="OrderSummaryByMonth"
-                 package-name="com.example.model"
-                 never-cache="true"
-                 title="Order Summary">
-        <member-entity entity-name=" OrderHeader" entity-alias="oh"/>
-        <field name="orderMonthYear" function="date_format" value="oh.entry_date" format="%Y-%m"/>
-        <field name="totalOrders" function="count" value="oh.entryDate"/>
-        <alias-all entity-alias="oh"/>
-        <alias entity-alias="OH" name="entryDate" group-by="true"/>
-
-        <view-link entity-alias="oh" rel-entity-name="OrderHeader" rel-entity-alias="oh2">
-            <key-map field-name="entryDate" rel-field-name="entryDate"/>
+    <view-entity entity-name="PartyPersonAndRole"
+                 package-name="org.apache.ofbiz.party.party"
+                 title="Party and Person View">
+        <member-entity entity-alias="PTY" entity-name="Party"/>
+        <member-entity entity-alias="PERS" entity-name="Person"/>
+        <member-entity entity-alias="PROLE" entity-name="PartyRole"/>
+        <alias-all entity-alias="PTY"/>
+        <alias-all entity-alias="PERS"/>
+        <alias-all entity-alias="PROLE"/>
+        <view-link entity-alias="PTY" rel-entity-alias="PERS">
+            <key-map field-name="partyId"/>
         </view-link>
-        <condition field-name="entry_date" operator="not-null"/>
-<!--        <group-by field-name="orderMonthYear"/>-->
+        <view-link entity-alias="PERS" rel-entity-alias="PROLE">
+            <key-map field-name="partyId"/>
+        </view-link>
+    </view-entity>
+
+    <!--    <alias entity-alias="ORLE" name="roleTypeId" group-by="true"/>-->
+
+
+    <view-entity entity-name="TopCustomers" package-name="org.apache.ofbiz.order"
+                 title="Order, Person, and Role View Entity"
+                 description="View entity combining OrderHeader, OrderRole, and Person entities">
+        <member-entity entity-alias="oh" entity-name="OrderHeader"/>
+        <member-entity entity-alias="orole" entity-name="OrderRole"/>
+        <member-entity entity-alias="p" entity-name="Person"/>
+        <!--        <alias-all entity-alias="oh"/>-->
+        <alias entity-alias="oh" name="orderId"/>
+        <alias entity-alias="oh" name="totalSpending" field="grandTotal" function="sum"/>
+        <alias entity-alias="oh" field="salesChannelEnumId" name="totalOrders" function="count"/>
+        <alias entity-alias="orole" name="roleTypeId"/>
+        <alias entity-alias="p" name="partyId" group-by="true"/>
+        <alias entity-alias="p" name="firstName"/>
+        <alias entity-alias="p" name="lastName"/>
+
+        <view-link entity-alias="oh" rel-entity-alias="orole">
+            <key-map field-name="orderId"/>
+            <entity-condition>
+                <condition-list combine="and">
+                    <condition-expr field-name="roleTypeId" entity-alias="orole" value="PLACING_CUSTOMER"/>
+                </condition-list>
+            </entity-condition>
+        </view-link>
+        <view-link entity-alias="orole" rel-entity-alias="p">
+            <key-map field-name="partyId"/>
+        </view-link>
+    </view-entity>
+
+
+    <view-entity entity-name="LatestOrders" package-name="org.apache.ofbiz.party.party"
+                 title="Customer Orders View">
+        <member-entity entity-alias="oh" entity-name="OrderHeader"/>
+        <member-entity entity-alias="orole" entity-name="OrderRole"/>
+        <member-entity entity-alias="p" entity-name="Person"/>
+        <alias name="orderId" entity-alias="oh"/>
+        <alias name="partyId" entity-alias="p"/>
+        <alias name="firstName" entity-alias="p"/>
+        <alias name="lastName" entity-alias="p"/>
+        <alias name="grandTotal" entity-alias="oh"/>
+        <alias name="entryDate" entity-alias="oh"/>
+        <alias name="statusId" entity-alias="oh"/>
+        <view-link entity-alias="oh" rel-entity-alias="orole">
+            <key-map field-name="orderId"/>
+            <entity-condition>
+                <condition-list combine="and">
+                    <condition-expr field-name="roleTypeId" entity-alias="orole" value="PLACING_CUSTOMER"/>
+                </condition-list>
+            </entity-condition>
+        </view-link>
+        <view-link entity-alias="orole" rel-entity-alias="p">
+            <key-map field-name="partyId"/>
+        </view-link>
     </view-entity>
 
 

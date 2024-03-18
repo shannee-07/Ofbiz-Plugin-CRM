@@ -37,15 +37,13 @@ under the License.
         <description>Finds productId(s) corresponding to a product reference, productId or a GoodIdentification
             idValue
         </description>
-<!--        <attribute type="String" mode="IN" name="idToFind" optional="true"/>-->
-        <!--        <attribute type="String" mode="IN" name="goodIdentificationTypeId" optional="true"/>-->
-        <!--        <attribute type="String" mode="IN" name="searchProductFirst" optional="true"/>-->
-        <!--        <attribute type="String" mode="IN" name="searchAllId" optional="true"/>-->
-        <!--        <attribute type="org.apache.ofbiz.entity.GenericValue" mode="OUT" name="product" optional="true"/>-->
         <attribute type="Object" mode="OUT" name="completedOrdersCount" optional="true"/>
         <attribute type="Object" mode="OUT" name="completedItemsCount" optional="true"/>
         <attribute type="List" mode="OUT" name="monthViseOrders" optional="true"/>
-
+        <attribute type="Object" mode="OUT" name="totalRevenue" optional="true"/>
+        <attribute type="Object" mode="OUT" name="totalCustomers" optional="true"/>
+        <attribute type="Object" mode="OUT" name="topCustomers" optional="true"/>
+        <attribute type="List" mode="OUT" name="latestOrders" optional="true"/>
 
     </service>
 
@@ -54,11 +52,12 @@ under the License.
         <description>Create a Coupon using a service in Java</description>
         <auto-attributes include="pk" mode="OUT" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="false"/>
-<!--        <override name="comments" optional="true"/>-->
+        <!--        <override name="comments" optional="true"/>-->
     </service>
 
     <service name="createCouponByGroovyService" default-entity-name="Coupon" engine="groovy"
-             location="component://ofcrm/groovyScripts/CRMServices.groovy" invoke="createCoupon" auth="true" action="POST" export="true">
+             location="component://ofcrm/groovyScripts/CRMServices.groovy" invoke="createCoupon" auth="true"
+             action="POST" export="true">
         <description>Create a coupon using a service in Groovy</description>
         <auto-attributes include="pk" mode="OUT" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="false"/>

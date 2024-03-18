@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.sql.Timestamp;
 
+
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
@@ -58,7 +59,7 @@ public class CRMServices {
         try {
 //                    .queryList();
 
-            // Get month vise orders:
+            // [1] Get month vise orders:
 
             Map<String, Object> summaryByMonth = new HashMap<>();
 
@@ -96,16 +97,47 @@ public class CRMServices {
 
             // completed
 
+            // [2] Completed Items Count
             long completedItemsCount = EntityQuery.use(delegator).from("OrderItem").where("statusId", "ITEM_COMPLETED").queryCount();
 
+            List<GenericValue>  completedOrders = EntityQuery.use(delegator).from("OrderHeader").where("statusId", "ORDER_COMPLETED").queryList();
 
-            long completedOrdersCount = EntityQuery.use(delegator).from("OrderHeader").where("statusId", "ORDER_COMPLETED").queryCount();
+            // [3] Completed Orders Count
+            long completedOrdersCount = completedOrders.size();
 
+            // [4] Total revenue:
+            BigDecimal totalRevenue = BigDecimal.ZERO;
+            for (GenericValue order : completedOrders) {
+                BigDecimal grandTotal = order.getBigDecimal("grandTotal");
+                if (grandTotal != null) {
+                    totalRevenue = totalRevenue.add(grandTotal);
+                }
+            }
+
+            // [5] Total Customers:
+            long totalCustomers = EntityQuery.use(delegator).from("PartyPersonAndRole").where("roleTypeId", "CUSTOMER").queryCount();
+
+            // [6] Top Customers based on spent amount:
+            List<GenericValue> topCustomers = EntityQuery.use(delegator).select("partyId","firstName","lastName","totalSpending","totalOrders").from("TopCustomers").orderBy("totalSpending DESC").queryList();
+
+            // [7] Latest Orders
+            List<GenericValue> latestOrders = EntityQuery.use(delegator).from("LatestOrders").orderBy("entryDate DESC").queryList();
+
+
+//            long totalRevenue = EntityQuery.use(delegator).from("")
 
             Map<String, Object> res = ServiceUtil.returnSuccess();
             res.put("completedItemsCount", completedItemsCount);
             res.put("completedOrdersCount", completedOrdersCount);
             res.put("monthViseOrders", monthViseOrders);
+            res.put("totalRevenue", totalRevenue);
+            res.put("totalCustomers", totalCustomers);
+            res.put("topCustomers", topCustomers);
+            res.put("latestOrders", latestOrders);
+
+
+
+
 
             return res;
 
