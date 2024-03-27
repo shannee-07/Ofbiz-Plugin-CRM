@@ -23,5 +23,7 @@ under the License.
         <menu-item name="main" title="AddCoupon"><link target="main"/></menu-item>
         <menu-item name="findCoupon" title="${uiLabelMap.CouponFind}"><link target="FindCoupon"/></menu-item>
         <menu-item name="addCouponFTL" title="FTL"><link target="AddCouponFtl"/></menu-item>
+        <menu-item name="listOrders" title="OrdersFTL"><link target="ListOrdersFtl"/></menu-item>
+
     </menu>
 </menus>

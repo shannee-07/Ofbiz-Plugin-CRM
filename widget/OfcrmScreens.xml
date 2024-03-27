@@ -80,7 +80,8 @@ under the License.
     <screen name="AddCouponFtl">
         <section>
             <actions>
-                <set field="titleProperty" value="PageTitleAddCoupon"/>
+                <set field="titleProperty" value="Add Coupon"/>
+
                 <set field="headerItem" value="addCouponFtl"/>
                 <script location="component://ofcrm/groovyScripts/crud/ListCoupon.groovy"/>
             </actions>
@@ -102,6 +103,37 @@ under the License.
                             <platform-specific>
                                 <html>
                                     <html-template location="component://ofcrm/webapp/ofcrm/crud/AddCoupon.ftl"/>
+                                </html>
+                            </platform-specific>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <screen name="OrdersFtl">
+        <section>
+            <actions>
+                <set field="titleProperty" value="Orders"/>
+
+<!--                <set field="headerItem" value="ordersFtl"/>-->
+                <set field="minAmount" value="${parameters.minAmount}"/>
+                <set field="orderId" value="${parameters.orderId}"/>
+                <set field="sortBy" value="${parameters.sortBy}"/>
+                <set field="statusId" value="${parameters.statusId}"/>
+                <script location="component://ofcrm/groovyScripts/crud/ListOrders.groovy"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="OrdersDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <screenlet title="${uiLabelMap.OrdersInfo}">
+                            <label style="h4" text="${uiLabelMap.OrdersList}"/>
+
+                            <platform-specific>
+                                <html>
+                                    <html-template location="component://ofcrm/webapp/ofcrm/crud/OrdersInfo.ftl"/>
                                 </html>
                             </platform-specific>
                         </screenlet>

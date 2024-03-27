@@ -1,0 +1,121 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    font-family: "Roboto", Arial, sans-serif;
+}
+
+
+
+.container {
+    max-width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="number"],
+input[type="text"] {
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #e0e0e0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 10px;
+    justify-content: center;
+    /* align-items: center; */
+    /* border: 2px solid black; */
+}
+
+.filter-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.filter-row label,
+.filter-row select,
+.filter-row input {
+    margin-right: 10px;
+    margin-bottom: 10px;
+
+}
+
+.filter-row select {
+    flex-grow: 1;
+}
+
+/* Button styling */
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#minAmount, #orderStatus{
+    max-width: 20%;
+}
+
+#orderStatus {
+    padding: 5px 12px; /* Increase padding */
+    font-size: 16px; /* Increase text size */
+    padding-right: 17px;
+}
+
+.filter-row input[type="radio"] {
+    transform: scale(1.5); /* Increase size of radio button */
+    margin-right: 5px; /* Adjust spacing between radio buttons */
+    padding: 0px 5px;
+}

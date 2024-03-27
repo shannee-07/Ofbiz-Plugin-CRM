@@ -74,13 +74,18 @@ under the License.
     <request-map uri="createCouponEvent">
         <security https="true" auth="true"/>
         <event type="java" path="com.example.crm.events.CRMEvents" invoke="createCouponEvent"/>
-        <response name="success" type="view" value="main"/>
-        <response name="error" type="view" value="main"/>
+        <response name="success" type="view" value="AddCouponFtl"/>
+        <response name="error" type="view" value="AddCouponFtl"/>
     </request-map>
 
     <request-map uri="AddCouponFtl">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="AddCouponFtl"/>
+    </request-map>
+
+    <request-map uri="ListOrdersFtl">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ListOrdersFtl"/>
     </request-map>
 
     <!-- Request Mappings -->
@@ -91,6 +96,10 @@ under the License.
 
     <!-- View Mappings -->
     <view-map name="AddCouponFtl" type="screen" page="component://ofcrm/widget/OfcrmScreens.xml#AddCouponFtl"/>
+
+    <view-map name="ListOrdersFtl" type="screen" page="component://ofcrm/widget/OfcrmScreens.xml#OrdersFtl"/>
+
+
     <view-map name="main" type="screen" page="component://ofcrm/widget/OfcrmScreens.xml#main"/>
     <view-map name="FindCoupon" type="screen" page="component://ofcrm/widget/OfcrmScreens.xml#FindCoupon"/>
 
