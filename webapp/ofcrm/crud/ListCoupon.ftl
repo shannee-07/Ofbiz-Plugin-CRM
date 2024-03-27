@@ -3,6 +3,7 @@
         <tr>
             <th>${uiLabelMap.CouponId}</th>
             <th>${uiLabelMap.CouponDescription}</th>
+            <th>${uiLabelMap.CouponTypeId}</th>
             <th>${uiLabelMap.CouponDiscountPercentage}</th>
             <th>${uiLabelMap.CouponExpiryDate}</th>
         </tr>
@@ -13,6 +14,8 @@
                 <tr>
                     <td>${coupon.couponId?default("NA")}</td>
                     <td>${coupon.description?default("NA")}</td>
+                     <td>${ofcrm.getRelatedOne("CouponType").get("couponTypeId", locale)}</td>
+
                     <td>${coupon.discountPercentage!}</td>
                     <td>${coupon.expiryDate!}</td>
                 </tr>

@@ -63,13 +63,17 @@ under the License.
     <service name="createCouponByJavaService" default-entity-name="Coupon" engine="java" action="POST" export="true"
              location="com.example.crm.services.CRMServices" invoke="createCoupon" auth="true">
         <description>Create a Coupon using a service in Java</description>
-        <auto-attributes include="pk" mode="OUT" optional="false"/>
-        <auto-attributes include="nonpk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute type="Object" mode="OUT" name="result" optional="true"/>
+
+<!--        <auto-attributes include="pk" mode="OUT" optional="true"/>-->
+        <auto-attributes include="pk" mode="OUT" optional="true"/>
+
         <!--        <override name="comments" optional="true"/>-->
     </service>
 
     <service name="createCouponByGroovyService" default-entity-name="Coupon" engine="groovy"
-             location="component://ofcrm/groovyScripts/CRMServices.groovy" invoke="createCoupon" auth="true"
+             location="component://ofcrm/groovyScripts/CRMServices.groovy" invoke="createCoupon"
              action="POST" export="true">
         <description>Create a coupon using a service in Groovy</description>
         <auto-attributes include="pk" mode="OUT" optional="false"/>

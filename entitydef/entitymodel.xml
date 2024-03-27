@@ -28,11 +28,33 @@ under the License.
     <copyright></copyright>
     <version>1.0</version>
     <!--  Loyalty Program Data Model  -->
+
+    <entity entity-name="CouponType" package-name="org.apache.ofbiz.ofcrm">
+        <field name="couponTypeId" type="id" description="Primary sequenced ID"/>
+        <field name="description" type="description" description="Description of the coupon type"/>
+        <prim-key field="couponTypeId"/>
+    </entity>
+
     <entity entity-name="Coupon" package-name="org.apache.ofbiz.ofcrm" title="Coupon Entity">
         <field name="couponId" type="id"><description>primary sequenced ID</description></field>
+        <field name="couponTypeId" type="id"></field>
         <field name="description" type="description"></field>
         <field name="discountPercentage" type="numeric"></field>
         <field name="expiryDate" type="date"></field>
+        <field name="productCategoryId" type="id"></field>
+        <field name="productId" type="id"></field>
+        <field name="upto" type="numeric"></field>
+        <field name="minPurchase" type="numeric"></field>
+
+        <relation type="one" fk-name="coupon_category" rel-entity-name="ProductCategory">
+            <key-map field-name="productCategoryId"/>
+        </relation>
+        <relation type="one" fk-name="coupon_product" rel-entity-name="Product">
+            <key-map field-name="productId"/>
+        </relation>
+        <relation type="one" fk-name="coupon_type" rel-entity-name="CouponType">
+            <key-map field-name="couponTypeId"/>
+        </relation>
         <prim-key field="couponId"/>
     </entity>
 
@@ -62,4 +84,21 @@ under the License.
         </relation>
         <prim-key field="redemptionId"/>
     </entity>
+
+    <entity entity-name="PartyCoupon" package-name="org.apache.ofbiz.ofcrm" title="Available coupons to users">
+        <field name="partyId" type="id"></field>
+        <field name="couponId" type="id"></field>
+        <field name="expiryDate" type="date"></field>
+
+        <relation type="one" fk-name="partycouponrel" rel-entity-name="Party">
+            <key-map field-name="partyId"/>
+        </relation>
+        <relation type="one" fk-name="couponavailable" rel-entity-name="Coupon">
+            <key-map field-name="couponId"/>
+        </relation>
+        <prim-key field="partyId"/>
+        <prim-key field="coupondId"/>
+
+    </entity>
+
 </entitymodel>

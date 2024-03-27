@@ -1,5 +1,6 @@
 package com.example.crm.services;
 
+import org.apache.ofbiz.service.ModelService;
 import org.apache.ofbiz.common.email.EmailServices;
 
 import java.math.BigDecimal;
@@ -11,8 +12,8 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.sql.Timestamp;
-import java.util.Locale;
 
+import java.util.Locale;
 
 
 import org.apache.ofbiz.service.LocalDispatcher;
@@ -40,15 +41,21 @@ public class CRMServices {
         Delegator delegator = dctx.getDelegator();
         try {
             GenericValue coupon = delegator.makeValue("Coupon");
-            // Auto generating next sequence of couponId primary key
             coupon.setNextSeqId();
-            // Setting up all non primary key field values from context map
             coupon.setNonPKFields(context);
-            // Creating record in database for Coupon entity for prepared value
-            coupon = delegator.create(coupon);
-            result.put("couponId", coupon.getString("couponId"));
-            Debug.log("==========This is my first Java Service implementation in Apache OFBiz. OfbizDemo record created successfully with couponId: " + coupon.getString("couponId"));
-        } catch (GenericEntityException e) {
+
+//            result.put("couponId", coupon.getString("couponId"));
+
+
+            System.out.println("context is \n\n\n\n\n");
+            System.out.println(context);
+            System.out.println("\n\n\n\n\n");
+
+
+
+            //coupon = delegator.create(coupon);
+            //result.put("couponId", coupon.getString("couponId"));
+        } catch (Exception e) {
             Debug.logError(e, module);
             return ServiceUtil.returnError("Error in creating record in OfbizDemo entity ........" + module);
         }

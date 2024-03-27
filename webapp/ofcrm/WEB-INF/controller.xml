@@ -71,7 +71,6 @@ under the License.
         <response name="success" type="view" value="main"/>
     </request-map>
 
-
     <request-map uri="createCouponEvent">
         <security https="true" auth="true"/>
         <event type="java" path="com.example.crm.events.CRMEvents" invoke="createCouponEvent"/>

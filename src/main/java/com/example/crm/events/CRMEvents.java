@@ -3,6 +3,10 @@ package com.example.crm.events;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilValidate;
@@ -20,23 +24,38 @@ public class CRMEvents {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("coupon");
 
-        String couponId = request.getParameter("couponId");
-        String description = request.getParameter("description");
-        String discountPercentage = request.getParameter("discountPercentage");
-        String expiryDate = request.getParameter("expiryDate");
+//        String couponId = request.getParameter("couponId");
+//        String description = request.getParameter("description");
+//        String discountPercentage = request.getParameter("discountPercentage");
+//        String expiryDate = request.getParameter("expiryDate");
 
 
-        if (UtilValidate.isEmpty(description) || UtilValidate.isEmpty(discountPercentage) || UtilValidate.isEmpty(expiryDate)) {
-            String errMsg = "All fields are required";
-            request.setAttribute("_ERROR_MESSAGE_", errMsg);
-            return "error";
-        }
+//        if (UtilValidate.isEmpty(description) || UtilValidate.isEmpty(discountPercentage) || UtilValidate.isEmpty(expiryDate)) {
+//            String errMsg = "All fields are required";
+//            request.setAttribute("_ERROR_MESSAGE_", errMsg);
+//            return "error";
+//        }
 //        String comments = request.getParameter("comments");
+
+//        Map<String, String> map = new HashMap<>();
+//        map.put("couponId", couponId);
+//        map.put("description", description);
+//        map.put("discountPercentage", discountPercentage);
+//        map.put("expiryDate", expiryDate);
+
+        Map<String, String> map = new HashMap<>();
+        Enumeration<String> parameterNames = request.getParameterNames();
+
+        while (parameterNames.hasMoreElements()) {
+            String paramName = parameterNames.nextElement();
+            String paramValue = request.getParameter(paramName);
+            map.put(paramName, paramValue);
+        }
+
 
         try {
             Debug.logInfo("=======Creating Coupon record in event using service createCouponByGroovyService=========", module);
-            dispatcher.runSync("createCouponByGroovyService", UtilMisc.toMap("couponId", couponId,
-                    "description", description, "discountPercentage", discountPercentage, "expiryDate", expiryDate));
+            dispatcher.runSync("createCouponByGroovyService", map);
         } catch (GenericServiceException e) {
             String errMsg = "Unable to create new records in Coupon entity: " + e.toString();
             request.setAttribute("_ERROR_MESSAGE_", errMsg);

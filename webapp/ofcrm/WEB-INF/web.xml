@@ -50,11 +50,11 @@ under the License.
         <display-name>ControlFilter</display-name>
         <filter-name>ControlFilter</filter-name>
         <filter-class>org.apache.ofbiz.webapp.control.ControlFilter</filter-class>
-        <init-param>
-            <param-name>allowedPaths</param-name>
-            <param-value>/error:/control:/select:/index.html:/index.jsp:/default.html:/default.jsp:/images</param-value>
-        </init-param>
-        <init-param><param-name>redirectPath</param-name><param-value>/control/main</param-value></init-param>
+<!--        <init-param>-->
+<!--            <param-name>allowedPaths</param-name>-->
+<!--            <param-value>/error:/control:/select:/index.html:/index.jsp:/default.html:/default.jsp:/images</param-value>-->
+<!--        </init-param>-->
+<!--        <init-param><param-name>redirectPath</param-name><param-value>/control/main</param-value></init-param>-->
         <init-param>
             <param-name>allowedPaths</param-name>
             <param-value>/error:/control:/select:/index.html:/index.jsp:/default.html:/default.jsp:/images:/includes/maincss.css:/css:/js</param-value>
